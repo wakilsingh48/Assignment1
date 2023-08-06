@@ -1,0 +1,96 @@
+import java.util.Queue;
+import java.util.LinkedList;
+
+class Athlete {
+    String name;
+    int age;
+    int runningDistanceEachDay;
+
+    public Athlete(String name, int age, int runningDistanceEachDay) {
+        this.name = name;
+        this.age = age;
+        this.runningDistanceEachDay = runningDistanceEachDay;
+    }
+}
+
+class QueueManager {
+    private Queue<Athlete> queue;
+
+    public QueueManager() {
+        queue = new LinkedList<>();
+    }
+
+    public void enqueue(Athlete athlete) {
+        queue.add(athlete);
+    }
+
+    public Athlete dequeue() {
+        return queue.poll();
+    }
+
+    public boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
+    public int size() {
+        return queue.size();
+    }
+
+    public Athlete peek() {
+        return queue.peek();
+    }
+
+    public void printQueueDetails() {
+        for (Athlete athlete : queue) {
+            System.out.println("Name: " + athlete.name);
+            System.out.println("Age: " + athlete.age);
+            System.out.println("Running Distance Each Day: " + athlete.runningDistanceEachDay);
+            System.out.println("-----------------------");
+        }
+    }
+}
+
+public class Main4 {
+    public static void main(String[] args) {
+        QueueManager athleteQueue = new QueueManager();
+
+        // Create 10 Athletes and enqueue them
+        Athlete athlete1 = new Athlete("Athlete 1", 25, 10);
+        Athlete athlete2 = new Athlete("Athlete 2", 30, 8);
+        Athlete athlete3 = new Athlete("Athlete 3", 22, 12);
+        Athlete athlete4 = new Athlete("Athlete 4", 28, 15);
+        Athlete athlete5 = new Athlete("Athlete 5", 24, 9);
+        Athlete athlete6 = new Athlete("Athlete 6", 31, 11);
+        Athlete athlete7 = new Athlete("Athlete 7", 27, 13);
+        Athlete athlete8 = new Athlete("Athlete 8", 29, 7);
+        Athlete athlete9 = new Athlete("Athlete 9", 26, 14);
+        Athlete athlete10 = new Athlete("Athlete 10", 23, 10);
+
+        athleteQueue.enqueue(athlete1);
+        athleteQueue.enqueue(athlete2);
+        athleteQueue.enqueue(athlete3);
+        athleteQueue.enqueue(athlete4);
+        athleteQueue.enqueue(athlete5);
+        athleteQueue.enqueue(athlete6);
+        athleteQueue.enqueue(athlete7);
+        athleteQueue.enqueue(athlete8);
+        athleteQueue.enqueue(athlete9);
+        athleteQueue.enqueue(athlete10);
+        athleteQueue.enqueue(athlete1);
+
+        // Iterate over the queue and print out the details of each Athlete
+        athleteQueue.printQueueDetails();
+
+        // Verify if the queue still contains the same Athletes
+        System.out.println("Is queue empty? " + athleteQueue.isEmpty());
+        
+          System.out.println("Queue size: " + athleteQueue.size());
+          
+          Athlete frontAthlete = athleteQueue.peek();
+
+        System.out.println("Front athlete: " + frontAthlete.name);
+         Athlete dequeuedAthlete2 = athleteQueue.dequeue();
+
+        System.out.println("Dequeued athlete: " + dequeuedAthlete2.name);
+    }
+}
