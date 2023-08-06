@@ -1,0 +1,66 @@
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
+
+public class RoundRobinScheduler {
+    private Stack<String> scheduleStack;
+    private Queue<String> datingQueue;
+    private Map<String, Integer> scheduleCountMap; // To track the number of times each lady friend is scheduled
+
+    public RoundRobinScheduler() {
+        scheduleStack = new Stack<>();
+        datingQueue = new LinkedList<>();
+        scheduleCountMap = new HashMap<>();
+    }
+
+    public void addLadyFriend(String ladyFriend) {
+        datingQueue.add(ladyFriend);
+        scheduleCountMap.put(ladyFriend, 0);
+    }
+
+    public void generateSchedule() {
+        int numLadyFriends = datingQueue.size();
+        int numDays = numLadyFriends * 2;  // Each lady friend gets two dates
+
+        for (int day = 1; day <= numDays; day++) {
+            String currentLadyFriend = datingQueue.poll();
+            scheduleStack.push(currentLadyFriend);
+
+            if (day % numLadyFriends == 0) {
+                while (!scheduleStack.isEmpty()) {
+                    String scheduledLadyFriend = scheduleStack.pop();
+                    System.out.println("Day " + day + ": John is dating " + scheduledLadyFriend);
+                    datingQueue.add(scheduledLadyFriend);
+                    scheduleCountMap.put(scheduledLadyFriend, scheduleCountMap.get(scheduledLadyFriend) + 1);
+                }
+            }
+        }
+    }
+
+    public void printScheduleCount() {
+        for (Map.Entry<String, Integer> entry : scheduleCountMap.entrySet()) {
+            String ladyFriend = entry.getKey();
+            int count = entry.getValue();
+            System.out.println(ladyFriend + " was scheduled " + count + " times.");
+        }
+    }
+
+    public static void main(String[] args) {
+        RoundRobinScheduler scheduler = new RoundRobinScheduler();
+
+        // Add lady friends to the scheduler
+        scheduler.addLadyFriend("Friend 1");
+        scheduler.addLadyFriend("Friend 2");
+        scheduler.addLadyFriend("Friend 3");
+        scheduler.addLadyFriend("Friend 4");
+        scheduler.addLadyFriend("Friend 5");
+
+        // Generate and print the schedule
+        scheduler.generateSchedule();
+
+        // Print the schedule count for each lady friend
+        scheduler.printScheduleCount();
+    }
+}
