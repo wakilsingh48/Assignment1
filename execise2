@@ -1,0 +1,98 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
+
+public class GuessingGameGUI extends JFrame {
+    private JLabel instructionsLabel;
+    private JTextField betTextField;
+    private JButton playButton;
+    private JTextArea resultTextArea;
+
+    private int money;
+    private int roundsLeft;
+
+    public GuessingGameGUI() {
+        super("Guessing Game");
+
+        money = 100;
+        roundsLeft = 10;
+
+        instructionsLabel = new JLabel("Welcome to the 50% Chance Game! You start with $100.");
+        betTextField = new JTextField(10);
+        playButton = new JButton("Play");
+        resultTextArea = new JTextArea(10, 30);
+        resultTextArea.setEditable(false);
+
+        setLayout(new BorderLayout());
+        JPanel topPanel = new JPanel();
+        topPanel.add(instructionsLabel);
+        add(topPanel, BorderLayout.NORTH);
+
+        JPanel centerPanel = new JPanel();
+        centerPanel.add(new JLabel("Place your bet: $"));
+        centerPanel.add(betTextField);
+        centerPanel.add(playButton);
+        add(centerPanel, BorderLayout.CENTER);
+
+        add(new JScrollPane(resultTextArea), BorderLayout.SOUTH);
+
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playRound();
+            }
+        });
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void playRound() {
+        if (roundsLeft == 0) {
+            resultTextArea.append("\nGame over! Final amount: $" + money);
+            playButton.setEnabled(false);
+            return;
+        }
+
+        int bet;
+        try {
+            bet = Integer.parseInt(betTextField.getText());
+        } catch (NumberFormatException ex) {
+            resultTextArea.append("\nInvalid bet. Please enter a valid amount.");
+            return;
+        }
+
+        if (bet < 0 || bet > money) {
+            resultTextArea.append("\nInvalid bet. Please enter a valid amount.");
+            return;
+        }
+
+        Random random = new Random();
+        boolean result = random.nextBoolean();
+
+        if (result) {
+            money += bet;
+            resultTextArea.append("\nCongratulations! You won $" + bet + ". Current amount: $" + money);
+        } else {
+            money -= bet;
+            resultTextArea.append("\nSorry, you lost $" + bet + ". Current amount: $" + money);
+        }
+
+        roundsLeft--;
+        betTextField.setText("");
+        betTextField.requestFocus();
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new GuessingGameGUI();
+            }
+        });
+    }
+}
